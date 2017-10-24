@@ -3,12 +3,14 @@ A server app for iMessage sticker pack app generation
 [start]
 
 cp -rf __stpapp__ {PATH}/App
+gostp
+
 cd {PATH}
 ios-sticker-pack update
 cd App
 
 rna __stp_appname__ stpnewapp
-rna __stp_appname_ext__ stpnewapp pack
+rna __stp_appname_ext__ stpnewapp_pack
 rna __stp_bundleid__ com.stells.stpnewapp
 rna __stp_bundleid_ext__ com.stells.stpnewapp.pack
 
