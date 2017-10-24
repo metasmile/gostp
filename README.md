@@ -13,9 +13,8 @@ rna __stp_bundleid__ com.stells.stpnewapp
 rna __stp_bundleid_ext__ com.stells.stpnewapp.pack
 
 fastlane init -u croing09@gmail.com
-y
 
->> Fastfile
+>> Fastfile write to head.
   produce(username:"croing09@gmail.com", app_name:"stpnewapp", app_identifier:"com.stells.stpnewapp", skip_itc:true)
   produce(username:"croing09@gmail.com", app_name:"stpnewapp pack", app_identifier:"com.stells.stpnewapp.pack", skip_itc:true)
   sigh(app_identifier:"com.stells.stpnewapp")
