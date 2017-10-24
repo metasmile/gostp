@@ -19,7 +19,7 @@ fastlane init -u croing09@gmail.com
   produce(username:"croing09@gmail.com", app_name:"stpnewapp pack", app_identifier:"com.stells.stpnewapp.pack", skip_itc:true)
   sigh(app_identifier:"com.stells.stpnewapp")
   sigh(app_identifier:"com.stells.stpnewapp.pack")
-  update_project_provisioning(xcodeproj:"stpnewapp.xcodeproj",profile: "./AppStore_com.stells.stpnewapp.mobileprovision", target_filter:"stpnewapp", build_configuration: "Release")
-  update_project_provisioning(xcodeproj:"stpnewapp.xcodeproj",profile: "./AppStore_com.stells.stpnewapp.pack.mobileprovision", target_filter:"StickerPackExtension", build_configuration: "Release")
+  update_project_provisioning(xcodeproj:"stpnewapp.xcodeproj",profile: "./AppStore_com.stells.stpnewapp.mobileprovision", target_filter:"stpnewapp")
+  update_project_provisioning(xcodeproj:"stpnewapp.xcodeproj",profile: "./AppStore_com.stells.stpnewapp.pack.mobileprovision", target_filter:"StickerPackExtension")
 
 ```
