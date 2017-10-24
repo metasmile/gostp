@@ -1,37 +1,20 @@
 A server app for iMessage sticker pack app generation
 ```
-mkdir gostp_test2
-cd gostp_test2
-ios-sticker-pack create
-cd App
-fastlane init
-xcodebuild -target gostp_test2 DEVELOPMENT_TEAM=MCAFR355J4 PRODUCT_BUNDLE_IDENTIFIER=com.stells.elie
-
 [start]
 
-cp -rf __stpapp__ App
-rename file/text: __stp_appname__ -> appname 
-rename file/text: __stp_bundleid__ -> app bundleid
-rename file/text: __stp_bundleid_ext__ -> app extension bundleid
+cp -rf __stpapp__ {PATH}/App
+cd {PATH}
+ios-sticker-pack update
+cd App
 
-blackgene@B:~/Documents/stpapp$ rna __stp_appname__ stpnewapp
-blackgene@B:~/Documents/stpapp$ rna __stp_appname_ext__ stpnewapp pack
-blackgene@B:~/Documents/stpapp$ rna __stp_bundleid__ com.stells.stpnewapp
-blackgene@B:~/Documents/stpapp$ rna __stp_bundleid_ext__ com.stells.stpnewapp.pack
+rna __stp_appname__ stpnewapp
+rna __stp_appname_ext__ stpnewapp pack
+rna __stp_bundleid__ com.stells.stpnewapp
+rna __stp_bundleid_ext__ com.stells.stpnewapp.pack
 
 fastlane init -u croing09@gmail.com
 y
 fastlane sigh -a com.stells.stpnewapp
 fastlane produce -u croing09@gmail.com -q "stpnewapp pack" -a com.stells.stpnewapp.pack --skip_itc
 fastlane sigh -a com.stells.stpnewapp.pack
-
-parsing AppStore_com.stells.stpnewapp.mobileprovision -> PROVISIONING_PROFILE(uuid), PROVISIONING_PROFILE_SPECIFIER(name)
-replace text: __stp_appprofile__ -> uuid
-replace text: __stp_appprofile_specifier__ 
-parsing AppStore_com.stells.stpnewapp.pack.mobileprovision
-
-
-fastlane init
-fastlane produce -u croing09@gmail.com -a com.stells.stpappid --skip_itc
-fastlane produce -u croing09@gmail.com -a com.stells.stpappid.pack --skip_itc
 ```
