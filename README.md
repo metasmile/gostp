@@ -9,6 +9,7 @@ xcodebuild -target gostp_test2 DEVELOPMENT_TEAM=MCAFR355J4 PRODUCT_BUNDLE_IDENTI
 
 [start]
 
+cp -rf __stpapp__ App
 rename file/text: __stp_appname__ -> appname 
 rename file/text: __stp_bundleid__ -> app bundleid
 rename file/text: __stp_bundleid_ext__ -> app extension bundleid
@@ -23,6 +24,11 @@ y
 fastlane sigh -a com.stells.stpnewapp
 fastlane produce -u croing09@gmail.com -q "stpnewapp pack" -a com.stells.stpnewapp.pack --skip_itc
 fastlane sigh -a com.stells.stpnewapp.pack
+
+parsing AppStore_com.stells.stpnewapp.mobileprovision -> PROVISIONING_PROFILE(uuid), PROVISIONING_PROFILE_SPECIFIER(name)
+replace text: __stp_appprofile__ -> uuid
+replace text: __stp_appprofile_specifier__ 
+parsing AppStore_com.stells.stpnewapp.pack.mobileprovision
 
 
 fastlane init
