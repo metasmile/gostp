@@ -1,0 +1,61 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import os, codecs, time, datetime,re,argparse,textwrap, subprocess
+from datetime import date, timedelta
+from time import mktime
+from os.path import expanduser
+from shutil import copyfile
+import sys
+import codecs
+from os.path import expanduser
+sys.stdout = codecs.getwriter('utf8')(sys.stdout)
+sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+
+def convert_to_apng(src_path, dest_path, is_verbose=False):
+	if is_verbose:
+		print "Start to export...", src_path, "=>" ,dest_path
+
+	filter_files = lambda f: os.path.splitext(f)[1][1:].strip().lower()=='png'
+	dir_abs_path = lambda d: os.path.join(src_path,d)
+	dirs = lambda d: os.listdir(d)
+	filter_only_dirs = lambda f: os.path.isdir(dir_abs_path(f)) and not f.startswith('.')
+
+	target_dirs = filter(filter_only_dirs, dirs(src_path))
+	targets = [(d, dir_abs_path(d), d.split('_'), dirs(dir_abs_path(d))) for d in target_dirs]
+	targets = filter(lambda args: len(args[2])==2 and len(args[3]), targets)
+
+	FNULL = None if is_verbose else open(os.devnull, 'w')
+
+	for dirname, dirpath, scheme, files in targets:
+		packname = scheme[0]
+		frame_interval = str(int(float(scheme[1])*1000))
+		output_apng_file = os.path.join(dest_path, (packname+'.png'))
+		subprocess.call(['apngasm','-o', output_apng_file, os.path.join(dirpath, '*.png'),'-d',frame_interval,'-F'], stdout=FNULL, stderr=subprocess.STDOUT)
+		if is_verbose:
+			print output_apng_file
+	return dest_path
+
+def main():
+	parser = argparse.ArgumentParser(description='Generate all png frames to APNGs.')
+	#parser.add_argument('target', help='Target path',required=False)
+	#parser.add_argument('-f','--force', type=bool, help='Something forceful.)', default=None, required=False, nargs='*')
+	args = parser.parse_args()
+
+	#print args.target
+	#__force__= args.force is not None
+
+	#path
+	__src_path__ = os.getcwd()
+	__src_dirname_scheme__ = os.path.basename(__src_path__).split('_src')
+	__dest_dirname__ = __src_dirname_scheme__[0]
+
+	if len(__src_dirname_scheme__)!=2:
+		print 'Default source directory name must be "%s_src" instead of "%s"' % (__dest_dirname__,__dest_dirname__)
+		sys.exit(1)
+
+	__dest_path__ = os.path.join(os.path.join(__src_path__,'..'), __dest_dirname__)
+	print convert_to_apng(__src_path__, __dest_path__)
+
+if __name__ == '__main__':
+	main()
