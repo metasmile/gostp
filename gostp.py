@@ -45,7 +45,7 @@ def main():
 
 	#phase 0: build APNGs
 	print "[i] Compiling APNGs and copying ..."
-	# convert_to_apng(src_path, dest_path)
+	convert_to_apng(src_path, dest_path)
 
 	print "[i] Generating Xcode Project ..."
 	#phase 1: copy
