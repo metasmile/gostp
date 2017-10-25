@@ -17,7 +17,7 @@ sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 def main():
 	__STP_PATH__ = os.path.dirname(__file__)
-	__APP_PATH__ = os.path.join(__STP_PATH__, 'stpapp')
+	__STP_APP_PATH__ = os.path.join(__STP_PATH__, 'stpapp')
 	__STP_CONFIG__ = {
 		"stp_app_path": "app",
 		"stp_allowing_stickerpack_exts": ["png","gif","jpg"]
@@ -43,6 +43,16 @@ def main():
 
 	dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_path"])
 
+	#phase -1: clean up
+	print "[i] Clean up ..."
+	__CLEANING_TARGET_PATH__ = [
+		os.path.join(__STP_APP_PATH__, "DerivedData"),
+		os.path.join(dest_app_path, "DerivedData")
+	]
+	for clean_dir in __CLEANING_TARGET_PATH__:
+		if os.path.exists(clean_dir):
+			shutil.rmtree(clean_dir)
+
 	#phase 0: build APNGs
 	print "[i] Compiling APNGs and copying ..."
 	convert_to_apng(src_path, dest_path)
@@ -51,17 +61,14 @@ def main():
 	#phase 1: copy
 	if os.path.exists(dest_app_path):
 		shutil.rmtree(dest_app_path)
-	if shutil.copytree(__APP_PATH__,dest_app_path):
+	if shutil.copytree(__STP_APP_PATH__,dest_app_path):
 		print "[!] Failed to initialize"
 		sys.exit(1)
 
 	#phase 2: replace file names
 	for path, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
-		if path==dest_app_path:
-			continue
-
 		file = os.path.basename(path)
-		if file.startswith('.'):
+		if path==dest_app_path or file.startswith('.'):
 			continue
 
 		for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
