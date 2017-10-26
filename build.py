@@ -1,4 +1,4 @@
-#!/usr/bin/python
+"stp_app_relative_path"#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -12,36 +12,62 @@ import glob
 from apngen.apngen import convert_to_apng
 import codecs
 
-sys.stdout = codecs.getwriter('utf8')(sys.stdout)
-sys.stderr = codecs.getwriter('utf8')(sys.stderr)
+sys.stdout = codecs.getwriter("utf8")(sys.stdout)
+sys.stderr = codecs.getwriter("utf8")(sys.stderr)
 
 def main():
+	parser = argparse.ArgumentParser(description="Complie APNGs and then build a stickerpack with a valid xcode project.")
+
+	parser.add_argument("src_path", help="Target source path. (default=./)", default="./", nargs="*")
+	parser.add_argument("dest_path", help="Target destination path.", nargs="?")
+
+	parser.add_argument("-n","--name", help="App Name (Project Name)", nargs="*")
+	parser.add_argument("--display-name", help="App Display Name", nargs="*")
+	parser.add_argument("-i","--bundle-id", help="App Bundle Id", nargs="*")
+	parser.add_argument("--extension-name", help="Extension Name", nargs="*")
+	parser.add_argument("-e","--extension-bundle-id", help="Extension Bundle Id", nargs="*")
+
+	parser.add_argument("--dest-relative-path", help="Destination app relative path", nargs="*")
+
+	args = vars(parser.parse_args())
+
 	__STP_PATH__ = os.path.dirname(__file__)
-	__STP_APP_PATH__ = os.path.join(__STP_PATH__, 'stpapp')
+	__STP_APP_PATH__ = os.path.join(__STP_PATH__, "stpapp")
 	__STP_CONFIG__ = {
-		"stp_app_path": "app",
+		"stp_app_relative_path": args["dest_relative_path"] or "app",
 		"stp_allowing_stickerpack_exts": ["png","gif","jpg"]
 	}
 
 	app_template_config_dict = {
-		"__stp_appname__": "stpnewapp",
-		"__stp_appdisplayname__": "New Sticker Pack",
-		"__stp_appname_ext__": "stpnewapp_pack",
-		"__stp_bundleid__": "com.stells.stpnewapp",
-		"__stp_bundleid_ext__": "com.stells.stpnewapp.pack"
+		"__stp_appname__": args["name"] or "Sticker",
+		"__stp_appdisplayname__": args["display_name"] or "Sticker",
+		"__stp_bundleid__": args["bundle_id"] or "com.gostp.sticker",
+
+		"__stp_appname_ext__": args["extension_name"] or "Sticker Pack",
+		"__stp_bundleid_ext__": args["extension_bundle_id"] or "com.gostp.sticker.pack"
 	}
 
-	src_path = '/Users/blackgene/Documents/hallo_src/'
+	args["src_path"] = "/Users/blackgene/Documents/hallo_src/"
+	args["dest_path"] = "/Users/blackgene/Documents/gostp_new_test/"
+	print args
+
+	src_path = expanduser(args["src_path"])
 	if not os.path.exists(src_path):
 		print "[!] Source path does not exist."
 		sys.exit(1)
 
-	dest_path = '/Users/blackgene/Documents/gostp_new_test/'
+	dest_path = expanduser(args["dest_path"])
 	if not os.path.exists(dest_path):
 		print "[i] Destination path does not exist. Creating ..."
 		os.makedirs(dest_path)
 
-	dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_path"])
+	dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_relative_path"])
+
+	print src_path
+	print dest_path
+	print dest_app_path
+	print app_template_config_dict
+	sys.exit(0)
 
 	#phase -1: clean up
 	print "[i] Clean up ..."
@@ -68,7 +94,7 @@ def main():
 	#phase 2: replace file names
 	for path, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
 		file = os.path.basename(path)
-		if path==dest_app_path or file.startswith('.'):
+		if path==dest_app_path or file.startswith("."):
 			continue
 
 		for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
@@ -83,7 +109,7 @@ def main():
 
 		for file_in_path in [os.path.join(path, f) for f in files]:
 			file = os.path.basename(file_in_path)
-			if file.startswith('.'):
+			if file.startswith("."):
 				continue
 
 			with open(file_in_path) as chkfile:
@@ -91,7 +117,7 @@ def main():
 					continue
 				chkfile.close()
 
-			rcur = codecs.open(file_in_path, 'r','utf-8')
+			rcur = codecs.open(file_in_path, "r","utf-8")
 			wlines = []
 			for line in rcur.readlines():
 				for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
@@ -100,7 +126,7 @@ def main():
 				wlines.append(line)
 			rcur.close()
 
-			wcur = codecs.open(file_in_path, 'w','utf-8')
+			wcur = codecs.open(file_in_path, "w","utf-8")
 			wcur.writelines(wlines)
 			wcur.close()
 
@@ -146,18 +172,18 @@ def main():
 		w.write(json.dumps(stickerpack_contents, sort_keys=True, indent=4))
 		w.close()
 
-	return
+	return dest_app_path
 
 
 def istextfile(fileobj, blocksize=512):
 	PY3 = sys.version_info[0] == 3
 	int2byte = (lambda x: bytes((x,))) if PY3 else chr
 	_text_characters = (
-	        b''.join(int2byte(i) for i in range(32, 127)) +
-	        b'\n\r\t\f\b')
+	        b"".join(int2byte(i) for i in range(32, 127)) +
+	        b"\n\r\t\f\b")
 
 	block = fileobj.read(blocksize)
-	if b'\x00' in block:
+	if b"\x00" in block:
 		return False
 	elif not block:
 		return True
@@ -165,5 +191,5 @@ def istextfile(fileobj, blocksize=512):
 	nontext = block.translate(None, _text_characters)
 	return float(len(nontext)) / len(block) <= 0.30
 
-if __name__ == '__main__':
-	main()
+if __name__ == "__main__":
+	print main()

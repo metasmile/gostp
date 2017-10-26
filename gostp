@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+
+usage() {
+	echo "usage: gostp new <command> [option ...]"
+	echo
+	echo "commands:"
+	echo
+	echo "examples:"
+	echo
+}
+
+version() {
+	echo "0.1"
+}
+
+main() {
+	if [ "$#" -lt 1 ]; then
+		usage; exit 1
+	fi
+
+	local subcommand="$1"; shift
+	case $subcommand in
+		"-h"|"--help")
+			usage; exit 0
+			;;
+		"-v"|"--version")
+			version; exit 0
+			;;
+	esac
+
+	local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+	if [ ! -e "$workingdir/gostp-$subcommand" ]; then
+		usage; exit 1
+	fi
+
+	source "$workingdir/gostp-$subcommand" "$@"
+}
+main "$@"
