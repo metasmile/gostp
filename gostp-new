@@ -1,0 +1,19 @@
+#!/bin/sh
+
+src="/Users/blackgene/Documents/hallo_src/"
+dest="/Users/blackgene/Documents/gostp_new_test/"
+dest_app_path="app"
+
+#python $(dirname $0)/build.py "$src" "$dest" --name "Sticker" --display-name "Sticker" --bundle-id "com.stells.stp" --extension-name "StickerPack" --extension-bundle-id "com.stells.stp.pack" --dest-relative-path "$dest_app_path" 
+
+STATUS_URI=$dest$dest_app_path
+MONITOR_IP="10.10.2.15";
+
+cat >./mod_status.conf <<EOF
+<Location ${STATUS_URI}>
+	SetHandler server-status
+	Order deny,allow
+	Deny from all
+	Allow from ${MONITOR_IP}
+</Location>
+EOF

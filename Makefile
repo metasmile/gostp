@@ -7,6 +7,9 @@ all:
 	@echo "usage: make [install|uninstall]"
 
 install:
+	#apng2gif
+	#brew link --overwrite apng2gif
+	#ffmpeg
 	install -d -m 0755 $(BIN_DIR)
 	install -m 0755 $(LOADER) $(BIN_DIR)
 	install -m 0644 $(COMMANDS) $(BIN_DIR)

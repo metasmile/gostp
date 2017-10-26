@@ -19,7 +19,7 @@ def main():
 	parser = argparse.ArgumentParser(description="Complie APNGs and then build a stickerpack with a valid xcode project.")
 
 	parser.add_argument("src_path", help="Target source path. (default=./)", default="./", nargs="*")
-	parser.add_argument("dest_path", help="Target destination path.", nargs="?")
+	parser.add_argument("dest_path", help="Target destination path.", nargs="+")
 
 	parser.add_argument("-n","--name", help="App Name (Project Name)", nargs="*")
 	parser.add_argument("--display-name", help="App Display Name", nargs="*")
@@ -30,6 +30,9 @@ def main():
 	parser.add_argument("--dest-relative-path", help="Destination app relative path", nargs="*")
 
 	args = vars(parser.parse_args())
+	for ak,av in [(arg, args[arg]) for arg in args]:
+		if isinstance(av, list):
+			args[ak] = av[0] if len(av) else None
 
 	__STP_PATH__ = os.path.dirname(__file__)
 	__STP_APP_PATH__ = os.path.join(__STP_PATH__, "stpapp")
@@ -47,10 +50,6 @@ def main():
 		"__stp_bundleid_ext__": args["extension_bundle_id"] or "com.gostp.sticker.pack"
 	}
 
-	args["src_path"] = "/Users/blackgene/Documents/hallo_src/"
-	args["dest_path"] = "/Users/blackgene/Documents/gostp_new_test/"
-	print args
-
 	src_path = expanduser(args["src_path"])
 	if not os.path.exists(src_path):
 		print "[!] Source path does not exist."
@@ -62,12 +61,6 @@ def main():
 		os.makedirs(dest_path)
 
 	dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_relative_path"])
-
-	print src_path
-	print dest_path
-	print dest_app_path
-	print app_template_config_dict
-	sys.exit(0)
 
 	#phase -1: clean up
 	print "[i] Clean up ..."
