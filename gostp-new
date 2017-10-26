@@ -19,7 +19,10 @@ python $(dirname $0)/build.py "$src" "$dest" \
 --extension-bundle-id "$extension_bundle_id" \
 --dest-relative-path "$dest_app_path"
 
+#start setup app config ...
+echo "[i] Staring xcode project configuration ..."
 cd "$dest$dest_app_relative_path"
+
 fastlane init -u $user_id
 fastfile_path="./fastlane/Fastfile"
 filefile_sep="#Fastfile@gostp-new"
@@ -40,6 +43,28 @@ EOF
 fi
 
 fastlane release
+
+cd "$dest"
+#create gif
+echo "[i] Creating gifs from pngs ... $dest/gif"
+find . -maxdepth 1 -type f -name '*.png' | \
+while read FILE; do
+  FILENAME="${FILE%.*}";
+  apng2gif "$FILE" && mkdir gif;
+  mv -f "$FILENAME".gif gif/;
+  echo gif/"$FILENAME".gif;
+done &>/dev/null;
+
+#create mp4 from gifs
+echo "[i] Creating mp4 videos from gifs ... $dest/video"
+mkdir -p video; find gif -maxdepth 1 -type f -iname "*.gif" | \
+while read FILE; do
+  FILENAME=$(basename ${FILE%.*});
+  ffmpeg -stream_loop 5 -r 5 -i gif/$FILENAME.gif -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video/$FILENAME.mp4 -y;
+  echo video/$FILENAME.mp4;
+done &>/dev/null;
+
+echo "Done."
 
 # if [ ! -f $fastfile_path ]; then
 # fi
