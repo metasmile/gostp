@@ -4,12 +4,12 @@ src="/Users/blackgene/Documents/hallo_src/"
 dest="/Users/blackgene/Documents/gostp_new_test/"
 dest_app_relative_path="app"
 
-user_id="crogin09@gmail.com"
-name="Sticker"
-display_name="Sticker"
-bundle_id="com.stells.stp"
-extension_name="StickerPack"
-extension_bundle_id="com.stells.stp.pack"
+user_id="croing09@gmail.com"
+name="Sticker2"
+display_name="Sticker2"
+bundle_id="com.stells.stp2"
+extension_name="StickerPack2"
+extension_bundle_id="com.stells.stp2.pack"
 
 python $(dirname $0)/build.py "$src" "$dest" \
 --name "$name" \
@@ -20,7 +20,7 @@ python $(dirname $0)/build.py "$src" "$dest" \
 --dest-relative-path "$dest_app_path"
 
 cd "$dest$dest_app_relative_path"
-yes "y" | fastlane init -u $user_id
+fastlane init -u $user_id
 fastfile_path="./fastlane/Fastfile"
 filefile_sep="#Fastfile@gostp-new"
 
