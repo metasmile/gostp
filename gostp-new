@@ -2,18 +2,44 @@
 
 src="/Users/blackgene/Documents/hallo_src/"
 dest="/Users/blackgene/Documents/gostp_new_test/"
-dest_app_path="app"
+dest_app_relative_path="app"
 
-#python $(dirname $0)/build.py "$src" "$dest" --name "Sticker" --display-name "Sticker" --bundle-id "com.stells.stp" --extension-name "StickerPack" --extension-bundle-id "com.stells.stp.pack" --dest-relative-path "$dest_app_path" 
+user_id="crogin09@gmail.com"
+name="Sticker"
+display_name="Sticker"
+bundle_id="com.stells.stp"
+extension_name="StickerPack"
+extension_bundle_id="com.stells.stp.pack"
 
-STATUS_URI=$dest$dest_app_path
-MONITOR_IP="10.10.2.15";
+python $(dirname $0)/build.py "$src" "$dest" \
+--name "$name" \
+--display-name "$display_name" \
+--bundle-id "$bundle_id" \
+--extension-name "$extension_name" \
+--extension-bundle-id "$extension_bundle_id" \
+--dest-relative-path "$dest_app_path"
 
-cat >./mod_status.conf <<EOF
-<Location ${STATUS_URI}>
-	SetHandler server-status
-	Order deny,allow
-	Deny from all
-	Allow from ${MONITOR_IP}
-</Location>
+cd "$dest$dest_app_relative_path"
+yes "y" | fastlane init -u $user_id
+fastfile_path="./fastlane/Fastfile"
+filefile_sep="#Fastfile@gostp-new"
+
+if ! grep -qE "$filefile_sep" $fastfile_path
+then
+  fastfile_content=$(cat "$fastfile_path")
+  cat >$fastfile_path <<EOF
+#Fastfile@gostp-new
+produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:true)
+produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
+sigh(app_identifier:"$bundle_id")
+sigh(app_identifier:"$extension_bundle_id")
+update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
+update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$extension_bundle_id.mobileprovision", target_filter:"StickerPackExtension")
+${fastfile_content}
 EOF
+fi
+
+fastlane release
+
+# if [ ! -f $fastfile_path ]; then
+# fi
