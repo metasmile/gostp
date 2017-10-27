@@ -1,15 +1,42 @@
 #!/bin/sh
 
-src="/Users/blackgene/Documents/hallo_src/"
-dest="/Users/blackgene/Documents/gostp_new_test/"
+if [ "$#" -lt 4 ]; then
+  usage; exit 1
+fi
+
+# option: +
+user_id=$1; name=$2; bundle_id=$3; dest=$4;
+# option: *
+display_name="$name"
+extension_name="$name"Pack
+extension_bundle_id="$bundle_id.pack"
+# default options
+src="./"
 dest_app_relative_path="app"
 
-user_id="croing09@gmail.com"
-name="Sticker2"
-display_name="Sticker2"
-bundle_id="com.stells.stp2"
-extension_name="StickerPack2"
-extension_bundle_id="com.stells.stp2.pack"
+#set args
+while test $# -gt 0
+do
+  local option="$1"
+  case "$option" in
+    -s|--source-path)
+      src=$2
+      ;;
+    -a|--app-relative-path)
+      dest_app_relative_path=$2
+      ;;
+    -n|--display-name)
+      display_name=$2
+      ;;
+    -e|--extension-name)
+      extension_name=$2
+      ;;
+    -b|--extension-bundle-id)
+      extension_bundle_id=$2
+      ;;
+  esac
+  shift
+done
 
 python $(dirname $0)/build.py "$src" "$dest" \
 --name "$name" \

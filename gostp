@@ -1,12 +1,19 @@
 #!/usr/bin/env sh
 
-usage() {
-	echo "usage: gostp new <command> [option ...]"
-	echo
-	echo "commands:"
-	echo
-	echo "examples:"
-	echo
+usage()
+{
+  printf "Usage: "
+	printf "\n"
+	printf "%s [-v|--version] [-h|--help] <command> [option ...]\n" "$(basename $0)"
+	printf "\n"
+	printf "Commands:"
+	printf "\n"
+	printf "new <account> <app/project name> <bundle id> <destination path>"
+	printf "\t%s\n" "-s,--source-path: Prints version"
+	printf "\t%s\n" "-a,--app-relative-path: Prints version"
+	printf "\t%s\n" "-n,--display-name: Prints version"
+	printf "\t%s\n" "-e,--extension-name: Prints version"
+	printf "\t%s\n" "-b,--extension-bundle-id: Prints version"
 }
 
 version() {
