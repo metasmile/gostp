@@ -11,7 +11,7 @@ if ! grep -qE "$filefile_init_flag" $fastfile_path
 then
   fastfile_content=$(cat "$fastfile_path")
   cat >$fastfile_path <<EOF
-#Fastfile@gostp-new
+$filefile_init_flag
 produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:true)
 produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
 sigh(app_identifier:"$bundle_id")

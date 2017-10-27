@@ -15,6 +15,9 @@ src="./"
 dest_app_relative_path="app"
 # perf options
 export_gif_mp4=;
+# fastlane
+fastfile_path="./fastlane/Fastfile"
+filefile_init_flag="#Fastfile@gostp-init-flag"
 
 #set args
 while test $# -gt 0
@@ -49,32 +52,8 @@ python $(dirname $0)/build.py "$src" "$dest" \
 --bundle-id "$bundle_id" \
 --extension-name "$extension_name" \
 --extension-bundle-id "$extension_bundle_id" \
---dest-relative-path "$dest_app_path"
-
-#start setup app config ...
-echo "[i] Staring xcode project configuration ..."
-cd "$dest$dest_app_relative_path"
-
-fastlane init -u $user_id
-fastfile_path="./fastlane/Fastfile"
-filefile_sep="#Fastfile@gostp-new"
-
-if ! grep -qE "$filefile_sep" $fastfile_path
-then
-  fastfile_content=$(cat "$fastfile_path")
-  cat >$fastfile_path <<EOF
-#Fastfile@gostp-new
-produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:true)
-produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
-sigh(app_identifier:"$bundle_id")
-sigh(app_identifier:"$extension_bundle_id")
-update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
-update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$extension_bundle_id.mobileprovision", target_filter:"StickerPackExtension")
-${fastfile_content}
-EOF
-fi
-
-fastlane release
+--dest-relative-path "$dest_app_path" \
+--clean-app
 
 cd "$dest"
 
@@ -99,8 +78,3 @@ then
     echo video/$FILENAME.mp4;
   done &>/dev/null;
 fi
-
-echo "$dest"
-
-# if [ ! -f $fastfile_path ]; then
-# fi

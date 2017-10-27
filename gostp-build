@@ -1,0 +1,3 @@
+#!/bin/sh
+source $(dirname $0)/_gostp-build
+echo $dest

@@ -28,11 +28,15 @@ def main():
 	parser.add_argument("-e","--extension-bundle-id", help="Extension Bundle Id", nargs="*")
 
 	parser.add_argument("--dest-relative-path", help="Destination app relative path", nargs="*")
+	parser.add_argument("--clean-app", type=bool, help="Clean already built app files before start.", default=False, nargs="*")
 
 	args = vars(parser.parse_args())
 	for ak,av in [(arg, args[arg]) for arg in args]:
 		if isinstance(av, list):
 			args[ak] = av[0] if len(av) else None
+
+	print args
+	sys.exit(0)
 
 	__STP_PATH__ = os.path.dirname(__file__)
 	__STP_APP_PATH__ = os.path.join(__STP_PATH__, "stpapp")
@@ -40,6 +44,7 @@ def main():
 		"stp_app_relative_path": args["dest_relative_path"] or "app",
 		"stp_allowing_stickerpack_exts": ["png","gif","jpg"]
 	}
+	__STP_APP_CLEAN__ = args["clean_app"] is not False
 
 	app_template_config_dict = {
 		"__stp_appname__": args["name"] or "Sticker",
@@ -78,7 +83,7 @@ def main():
 
 	print "[i] Generating Xcode Project ..."
 	#phase 1: copy
-	if os.path.exists(dest_app_path):
+	if __STP_APP_CLEAN__ and os.path.exists(dest_app_path):
 		shutil.rmtree(dest_app_path)
 	if shutil.copytree(__STP_APP_PATH__,dest_app_path):
 		print "[!] Failed to initialize"
