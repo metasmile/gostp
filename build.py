@@ -1,4 +1,4 @@
-"stp_app_relative_path"#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -34,9 +34,6 @@ def main():
 	for ak,av in [(arg, args[arg]) for arg in args]:
 		if isinstance(av, list):
 			args[ak] = av[0] if len(av) else None
-
-	print args
-	sys.exit(0)
 
 	__STP_PATH__ = os.path.dirname(__file__)
 	__STP_APP_PATH__ = os.path.join(__STP_PATH__, "stpapp")
@@ -83,11 +80,16 @@ def main():
 
 	print "[i] Generating Xcode Project ..."
 	#phase 1: copy
-	if __STP_APP_CLEAN__ and os.path.exists(dest_app_path):
-		shutil.rmtree(dest_app_path)
-	if shutil.copytree(__STP_APP_PATH__,dest_app_path):
-		print "[!] Failed to initialize"
-		sys.exit(1)
+	is_dest_app_exists = os.path.exists(dest_app_path)
+	if is_dest_app_exists:
+		if __STP_APP_CLEAN__:
+			shutil.rmtree(dest_app_path)
+			is_dest_app_exists = False
+
+	if not is_dest_app_exists:
+		if shutil.copytree(__STP_APP_PATH__,dest_app_path):
+			print "[!] Failed to initialize"
+			sys.exit(1)
 
 	#phase 2: replace file names
 	for path, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
@@ -129,45 +131,51 @@ def main():
 			wcur.close()
 
 	#phase 4: insert sticker files
-	stickerpack_path = os.path.join(dest_app_path, "StickerPackExtension", "Stickers.xcstickers", "StickerPack.stickerpack")
-	if not os.path.exists(stickerpack_path):
+	src_stickerpack_path = os.path.join(__STP_APP_PATH__, "StickerPackExtension", "Stickers.xcstickers", "StickerPack.stickerpack")
+
+	dest_stickerpack_path = os.path.join(dest_app_path, "StickerPackExtension", "Stickers.xcstickers", "StickerPack.stickerpack")
+	if not os.path.exists(dest_stickerpack_path):
 		print "[i] Destination sticker pack path does not exist. Creating ..."
-		os.makedirs(stickerpack_path)
+		os.makedirs(dest_stickerpack_path)
 
 	# listing and copy APNGs
 	__TEMP_STICKER_PACK_NAME__ = "__stickername__.sticker"
-	__TEMP_STICKER_PACK_PATH__ = os.path.join(stickerpack_path, __TEMP_STICKER_PACK_NAME__)
-	__TEMP_STICKER_PACK_CONTENTS_PATH__ = os.path.join(__TEMP_STICKER_PACK_PATH__, "Contents.json")
-	__TEMP_STICKER_PACK_CONTENTS__ = json.load(codecs.open(__TEMP_STICKER_PACK_CONTENTS_PATH__,"r","utf-8"))
+
+	__DEST_TEMP_STICKER_PACK_PATH__ = os.path.join(dest_stickerpack_path, __TEMP_STICKER_PACK_NAME__)
+
+	__SRC_TEMP_STICKER_PACK_PATH__ = os.path.join(src_stickerpack_path, __TEMP_STICKER_PACK_NAME__)
+	__SRC_STICKER_PACK_CONTENTS_PATH__ = os.path.join(__SRC_TEMP_STICKER_PACK_PATH__, "Contents.json")
+	__SRC_STICKER_PACK_CONTENTS__ = json.load(codecs.open(__SRC_STICKER_PACK_CONTENTS_PATH__,"r","utf-8"))
 
 	sticker_image_src_path_list = sum([glob.glob(e) for e in [os.path.join(dest_path,"*."+ext) for ext in __STP_CONFIG__["stp_allowing_stickerpack_exts"]]], [])
 	for sticker_image_src_path in sticker_image_src_path_list:
 		sticker_filename = os.path.basename(sticker_image_src_path)
 		sticker_name = os.path.splitext(sticker_filename)[0]
 		sticker_pack_filename = sticker_name+".sticker"
-		sticker_image_dest_path = os.path.join(stickerpack_path, sticker_pack_filename)
+		dest_sticker_image_path = os.path.join(dest_stickerpack_path, sticker_pack_filename)
 		#make sticker pack dir
-		if not os.path.exists(sticker_image_dest_path):
-			os.makedirs(sticker_image_dest_path)
+		if not os.path.exists(dest_sticker_image_path):
+			os.makedirs(dest_sticker_image_path)
 		#copy image file
-		shutil.copyfile(sticker_image_src_path, os.path.join(sticker_image_dest_path, sticker_filename))
+		shutil.copyfile(sticker_image_src_path, os.path.join(dest_sticker_image_path, sticker_filename))
 		#generate Contents.json by Stickerpacks
-		stickerpack_contents =  dict(__TEMP_STICKER_PACK_CONTENTS__)
+		stickerpack_contents =  dict(__SRC_STICKER_PACK_CONTENTS__)
 		stickerpack_contents["properties"]["filename"] = sticker_filename
-		with codecs.open(os.path.join(sticker_image_dest_path, "Contents.json"),"w","utf-8") as w:
+		with codecs.open(os.path.join(dest_sticker_image_path, "Contents.json"),"w","utf-8") as w:
 			w.write(json.dumps(stickerpack_contents, sort_keys=True, indent=4))
 			w.close()
 	#clean temp file
-	if os.path.exists(__TEMP_STICKER_PACK_PATH__):
-		shutil.rmtree(__TEMP_STICKER_PACK_PATH__)
+	if os.path.exists(__DEST_TEMP_STICKER_PACK_PATH__):
+		shutil.rmtree(__DEST_TEMP_STICKER_PACK_PATH__)
 
 	#generate root Contents.json of Stickerpack
-	stickerpack_contents_path = os.path.join(stickerpack_path, "Contents.json")
-	stickerpack_contents = json.load(codecs.open(stickerpack_contents_path,"r","utf-8"))
-	stickerpack_contents["stickers"] = [{"filename": os.path.basename(e)} for e in glob.glob(os.path.join(stickerpack_path,"*.sticker"))]
+	src_stickerpack_contents_path = os.path.join(src_stickerpack_path, "Contents.json")
+	src_stickerpack_contents = json.load(codecs.open(src_stickerpack_contents_path,"r","utf-8"))
+	src_stickerpack_contents["stickers"] = [{"filename": os.path.basename(e)} for e in glob.glob(os.path.join(dest_stickerpack_path,"*.sticker"))]
 
-	with codecs.open(stickerpack_contents_path,"w","utf-8") as w:
-		w.write(json.dumps(stickerpack_contents, sort_keys=True, indent=4))
+	dest_stickerpack_contents_path = os.path.join(dest_stickerpack_path, "Contents.json")
+	with codecs.open(dest_stickerpack_contents_path,"w","utf-8") as w:
+		w.write(json.dumps(src_stickerpack_contents, sort_keys=True, indent=4))
 		w.close()
 
 	return dest_app_path

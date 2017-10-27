@@ -1,4 +1,5 @@
 #!/bin/sh
+source $(dirname $0)/_gostp-define
 source $(dirname $0)/_gostp-build
 
 #start setup app config ...
@@ -23,6 +24,12 @@ EOF
 fi
 
 fastlane release
+
+#insert finshed flag
+if ! grep -qE "$filefile_created_flag" $fastfile_path
+then
+  echo $filefile_created_flag >> $fastfile_path
+fi
 
 echo "$dest"
 
