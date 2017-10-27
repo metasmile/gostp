@@ -13,6 +13,8 @@ extension_bundle_id="$bundle_id.pack"
 # default options
 src="./"
 dest_app_relative_path="app"
+# perf options
+export_gif_mp4=;
 
 #set args
 while test $# -gt 0
@@ -33,6 +35,9 @@ do
       ;;
     -b|--extension-bundle-id)
       extension_bundle_id=$2
+      ;;
+    --export-gif-mp4)
+      export_gif_mp4=1
       ;;
   esac
   shift
@@ -72,26 +77,30 @@ fi
 fastlane release
 
 cd "$dest"
-#create gif
-echo "[i] Creating gifs from pngs ... $dest/gif"
-find . -maxdepth 1 -type f -name '*.png' | \
-while read FILE; do
-  FILENAME="${FILE%.*}";
-  apng2gif "$FILE" && mkdir gif;
-  mv -f "$FILENAME".gif gif/;
-  echo gif/"$FILENAME".gif;
-done &>/dev/null;
 
-#create mp4 from gifs
-echo "[i] Creating mp4 videos from gifs ... $dest/video"
-mkdir -p video; find gif -maxdepth 1 -type f -iname "*.gif" | \
-while read FILE; do
-  FILENAME=$(basename ${FILE%.*});
-  ffmpeg -stream_loop 5 -r 5 -i gif/$FILENAME.gif -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video/$FILENAME.mp4 -y;
-  echo video/$FILENAME.mp4;
-done &>/dev/null;
+if [[ $export_gif_mp4 ]]
+then
+  #create gif
+  echo "[i] Creating gifs from pngs ... $dest/gif"
+  find . -maxdepth 1 -type f -name '*.png' | \
+  while read FILE; do
+    FILENAME="${FILE%.*}";
+    apng2gif "$FILE" && mkdir gif;
+    mv -f "$FILENAME".gif gif/;
+    echo gif/"$FILENAME".gif;
+  done &>/dev/null;
 
-echo "Done."
+  #create mp4 from gifs
+  echo "[i] Creating mp4 videos from gifs ... $dest/video"
+  mkdir -p video; find gif -maxdepth 1 -type f -iname "*.gif" | \
+  while read FILE; do
+    FILENAME=$(basename ${FILE%.*});
+    ffmpeg -stream_loop 5 -r 5 -i gif/$FILENAME.gif -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video/$FILENAME.mp4 -y;
+    echo video/$FILENAME.mp4;
+  done &>/dev/null;
+fi
+
+echo "$dest"
 
 # if [ ! -f $fastfile_path ]; then
 # fi
