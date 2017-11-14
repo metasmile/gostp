@@ -1,7 +1,7 @@
 prefix = /usr/local
 BIN_DIR   = $(prefix)/bin
 LOADER    = gostp
-COMMANDS  = gostp-new gostp-update
+COMMANDS  = gostp-build gostp-update gostp-create
 
 all:
 	@echo "usage: make [install|uninstall]"
