@@ -4,7 +4,7 @@ source $(dirname $0)/_gostp-build
 
 #start setup app config ...
 echo "[i] Staring to update ..."
-cd "$dest$dest_app_relative_path"
+cd "$dest/$dest_app_relative_path"
 
 if ! grep -qE "$filefile_init_flag" $fastfile_path
 then
