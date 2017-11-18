@@ -21,6 +21,7 @@ then
 fi
 
 git xcp beta StickerPackExtension
+git xcp beta $name
 fastlane gym --scheme StickerPackExtension && fastlane deliver -f
 
 if [ $? -eq 0 ]; then
