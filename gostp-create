@@ -4,17 +4,17 @@ source $(dirname $0)/_gostp-build
 
 #start setup app config ...
 echo "[i] Staring xcode project configuration ..."
-cd "$dest/$dest_app_relative_path"
+cd "$dest_app_path"
 
 fastlane init -u $user_id
 
-if ! grep -qE "$filefile_init_flag" $fastfile_path
+if ! grep -qE "$fastfile_init_flag" $fastfile_path
 then
   fastfile_content=$(cat "$fastfile_path")
   cat >$fastfile_path <<EOF
-$filefile_init_flag
-produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:false)
-produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:false)
+$fastfile_init_flag
+produce(username:"$user_id", app_name:"$itc_display_name", app_identifier:"$bundle_id", skip_itc:false)
+produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
 sigh(app_identifier:"$bundle_id")
 sigh(app_identifier:"$extension_bundle_id")
 update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
@@ -30,9 +30,13 @@ if [ $? -eq 0 ]; then
   sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
 
   #insert finshed flag
-  if ! grep -qE "$filefile_created_flag" $fastfile_path
+  if ! grep -qE "$fastfile_created_flag" $fastfile_path
   then
-    echo $filefile_created_flag >> $fastfile_path
+    fastfile_content=$(cat "$fastfile_path")
+    cat >$fastfile_path <<EOF
+  $fastfile_created_flag
+  ${fastfile_content}
+EOF
   fi
 
   #print app path (if succeess)

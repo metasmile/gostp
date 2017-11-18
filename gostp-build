@@ -1,4 +1,11 @@
 #!/bin/sh
 source $(dirname $0)/_gostp-define
 source $(dirname $0)/_gostp-build
-echo $dest
+
+if [ $? -eq 0 ]; then
+  echo "[i] Build succeed."
+  echo "$dest"
+else
+  echo "[!] Something wroing while configure and register a project!"
+  exit 1
+fi

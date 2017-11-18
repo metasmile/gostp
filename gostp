@@ -12,10 +12,10 @@ usage()
 	printf "\t%s\n" "-s,--source-path: Source path of sticker assets "
 	printf "\t%s\n" "-a,--app-relative-path: Destination App Relative path"
 	printf "\t%s\n" "-n,--display-name: App Display Name"
+	printf "\t%s\n" "-i,--itc-display-name: Appstore/iTC Display Name"
 	printf "\t%s\n" "-e,--extension-name: App Extension Name"
 	printf "\t%s\n" "-b,--extension-bundle-id: App Extension Bundle Id"
-  printf "\t%s\n" "--export-gif-mp4: Convert and export with gif, mp4 from stickers"
-
+  printf "\t%s\n" "--skip-export-gif-mp4: Skip to convert and export with gif, mp4 from stickers"
 }
 
 version() {

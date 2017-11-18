@@ -6,45 +6,83 @@ fi
 
 STP_PATH=$(dirname $0)
 
-# option: +
-user_id=$1; name=$2; bundle_id=$3; dest=$4;
-# option: *
-display_name="$name"
-extension_name="$name"Pack
-extension_bundle_id="$bundle_id.pack"
-# default options
-src=$(pwd)
-dest_app_relative_path="app"
-# perf options
-export_gif_mp4=;
-# fastlane
-fastfile_path="./fastlane/Fastfile"
-filefile_init_flag="#Fastfile@gostp-init-flag"
-filefile_created_flag="#Fastfile@gostp-created-flag"
+params=()
 
 #set args
 while test $# -gt 0
 do
-  local option="$1"
+  local option="$1";
   case "$option" in
     -s|--source-path)
       src=$2
+      shift
       ;;
     -a|--app-relative-path)
       dest_app_relative_path=$2
+      shift
       ;;
     -n|--display-name)
       display_name=$2
+      shift
+      ;;
+    -i|--itc-display-name)
+      itc_display_name=$2
+      shift
       ;;
     -e|--extension-name)
       extension_name=$2
+      shift
       ;;
     -b|--extension-bundle-id)
       extension_bundle_id=$2
+      shift
       ;;
-    --export-gif-mp4)
-      export_gif_mp4=1
+    --skip-export-gif-mp4)
+      skip_export_gif_mp4=1
+      ;;
+    *)
+      params="$params $1"
       ;;
   esac
   shift
 done
+
+#params: +
+params=($params)
+
+user_id=${params[0]}
+name=${params[1]}
+bundle_id=${params[2]}
+dest=${params[3]}
+# option: *
+dest_app_relative_path="${dest_app_relative_path:-app}"
+dest_app_path="$dest/$dest_app_relative_path"
+display_name="${display_name:-$name}"
+itc_display_name="${itc_display_name:-${display_name:-$name}}"
+extension_name="${extension_name:-$name Pack}"
+extension_bundle_id="${extension_bundle_id:-"$bundle_id".pack}"
+src="${src:-$(pwd)}"
+# perf options
+skip_export_gif_mp4=${skip_export_gif_mp4:-0};
+# fastlane
+fastfile_path="$dest_app_path/fastlane/Fastfile"
+fastfile_init_flag="#Fastfile@gostp-init-flag"
+fastfile_created_flag="#Fastfile@gostp-created-flag"
+
+
+printf "[i] Now start gostp with following options... "
+printf "\n"
+printf "\n%s%s %s" "User Id" ":" "$user_id"
+printf "\n%s%s %s" "Xcode Project Name" ":" "$name"
+printf "\n%s%s %s" "Display Name" ":" "$display_name"
+printf "\n%s%s %s" "iTC/AppStore Name" ":" "$itc_display_name"
+printf "\n%s%s %s" "Bundle Id" ":" "$bundle_id"
+
+printf "\n%s%s %s" "Extension Name" ":" "$extension_name"
+printf "\n%s%s %s" "Extension Bundle Id" ":" "$extension_bundle_id"
+
+printf "\n%s%s %s" "Source Path" ":" "$src"
+printf "\n%s%s %s" "Destination Path" ":" "$dest"
+printf "\n%s%s %s" "Destination Xcode Project Path" ":" "$dest_app_path"
+printf "\n%s%s %s" "Skip Exporting GIF/mp4" ":" "$skip_export_gif_mp4"
+printf "\n\n"

@@ -3,17 +3,18 @@ source $(dirname $0)/_gostp-define
 source $(dirname $0)/_gostp-build
 
 #start setup app config ...
-echo "[i] Staring to update ..."
-cd "$dest/$dest_app_relative_path"
+echo "[i] Staring to upload updated project ..."
+cd "$dest_app_path"
 
-if ! grep -qE "$filefile_init_flag" $fastfile_path
+if ! grep -qE "$fastfile_init_flag" $fastfile_path
 then
   echo "[!] This project has not been initialized. Complete '$ gostp create' first. "
   exit 1
 fi
 
 #insert finshed flag
-if ! grep -qE "$filefile_created_flag" $fastfile_path
+echo $(grep -qE "$fastfile_created_flag" $fastfile_path)
+if ! grep -qE "$fastfile_created_flag" $fastfile_path
 then
   echo "[!] This project has not been initialized. Complete '$ gostp create' first. "
   exit 1
@@ -21,7 +22,9 @@ fi
 
 fastlane gym && fastlane deliver
 
-echo "$dest"
-
-# if [ ! -f $fastfile_path ]; then
-# fi
+if [ $? -eq 0 ]; then
+  echo "$dest"
+else
+  echo "[!] Something wroing while build and upload binary!"
+  exit 1
+fi
