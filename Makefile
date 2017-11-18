@@ -7,9 +7,9 @@ all:
 	@echo "usage: make [install|uninstall]"
 
 install:
-	#apng2gif
-	#brew link --overwrite apng2gif
-	#ffmpeg
+	brew list apng2gif &>/dev/null || brew install apng2gif
+	brew list ffmpeg &>/dev/null || brew install ffmpeg
+	git clone https://github.com/metasmile/git-xcp.git && cd git-xcp && make install && cd - && rm -rf ./git-xcp
 	install -d -m 0755 $(BIN_DIR)
 	install -m 0755 $(LOADER) $(BIN_DIR)
 	install -m 0644 $(COMMANDS) $(BIN_DIR)

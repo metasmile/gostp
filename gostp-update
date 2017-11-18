@@ -20,6 +20,7 @@ then
   exit 1
 fi
 
+git xcp beta StickerPackExtension
 fastlane gym --scheme StickerPackExtension && fastlane deliver -f
 
 if [ $? -eq 0 ]; then
