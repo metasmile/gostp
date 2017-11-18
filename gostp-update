@@ -27,6 +27,10 @@ fastlane gym --scheme StickerPackExtension && fastlane deliver -f
 if [ $? -eq 0 ]; then
   echo "$dest"
 else
-  echo "[!] Something wroing while build and upload binary!"
+  echo "[!] Something wrong while build and upload binary!"
+  echo "[i] Reverting build vertions ..."
+  git xcp beta StickerPackExtension --revert
+  git xcp beta $name --revert
+
   exit 1
 fi
