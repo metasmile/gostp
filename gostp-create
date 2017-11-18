@@ -13,8 +13,8 @@ then
   fastfile_content=$(cat "$fastfile_path")
   cat >$fastfile_path <<EOF
 $filefile_init_flag
-produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:true)
-produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
+produce(username:"$user_id", app_name:"$name", app_identifier:"$bundle_id", skip_itc:false)
+produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:false)
 sigh(app_identifier:"$bundle_id")
 sigh(app_identifier:"$extension_bundle_id")
 update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
@@ -25,13 +25,19 @@ fi
 
 fastlane release
 
-#insert finshed flag
-if ! grep -qE "$filefile_created_flag" $fastfile_path
-then
-  echo $filefile_created_flag >> $fastfile_path
+if [ $? -eq 0 ]; then
+  #touch itc was succeed
+  sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
+
+  #insert finshed flag
+  if ! grep -qE "$filefile_created_flag" $fastfile_path
+  then
+    echo $filefile_created_flag >> $fastfile_path
+  fi
+
+  #print app path (if succeess)
+  echo "$dest"
+else
+  echo "[!] Something wroing while configure and register a project!"
+  exit 1
 fi
-
-echo "$dest"
-
-# if [ ! -f $fastfile_path ]; then
-# fi
