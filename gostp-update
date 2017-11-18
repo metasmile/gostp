@@ -20,7 +20,7 @@ then
   exit 1
 fi
 
-fastlane gym && fastlane deliver
+fastlane gym --scheme StickerPackExtension && fastlane deliver -f
 
 if [ $? -eq 0 ]; then
   echo "$dest"
