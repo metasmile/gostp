@@ -46,6 +46,7 @@ EOF
     if [ ! "$git_was_initialied" ]; then
       echo "[i] Not found git repo. Integrating git ..."
       git init
+      git add . && git commit -m "[Initialized - $name]"
     fi
     cd -
   fi
