@@ -1,6 +1,7 @@
 prefix = /usr/local
 BIN_DIR   = $(prefix)/bin
 LOADER    = gostp
+HEADERS   = _gostp-define _gostp-build
 COMMANDS  = gostp-build gostp-update gostp-create
 
 all:
@@ -13,9 +14,10 @@ install:
 	git clone https://github.com/metasmile/git-xcp.git && cd git-xcp && make install && cd - && rm -rf ./git-xcp
 	install -d -m 0755 $(BIN_DIR)
 	install -m 0755 $(LOADER) $(BIN_DIR)
+	install -m 0644 $(HEADERS) $(BIN_DIR)
 	install -m 0644 $(COMMANDS) $(BIN_DIR)
 
 uninstall:
 	test -d $(BIN_DIR) && \
 	cd $(BIN_DIR) && \
-	rm -f $(LOADER) $(COMMANDS)
+	rm -f $(LOADER) $(HEADERS) $(COMMANDS)
