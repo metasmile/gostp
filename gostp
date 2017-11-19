@@ -16,6 +16,7 @@ usage()
 	printf "\t%s\n" "-e,--extension-name: App Extension Name"
 	printf "\t%s\n" "-b,--extension-bundle-id: App Extension Bundle Id"
   printf "\t%s\n" "--skip-export-gif-mp4: Skip to convert and export with gif, mp4 from stickers"
+  printf "\t%s\n" "--skip-git-actions: Skip all the git integrations"
 }
 
 version() {

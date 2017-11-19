@@ -40,6 +40,9 @@ do
     --skip-export-gif-mp4)
       skip_export_gif_mp4=1
       ;;
+    --skip-git-actions)
+      skip_git_actions=1
+      ;;
     *)
       params="$params $1"
       ;;
@@ -64,11 +67,11 @@ extension_bundle_id="${extension_bundle_id:-"$bundle_id".pack}"
 src="${src:-$(pwd)}"
 # perf options
 skip_export_gif_mp4=${skip_export_gif_mp4:-0};
+skip_git_actions=${skip_git_actions:-0};
 # fastlane
 fastfile_path="$dest_app_path/fastlane/Fastfile"
 fastfile_init_flag="#Fastfile@gostp-init-flag"
 fastfile_created_flag="#Fastfile@gostp-created-flag"
-
 
 printf "[i] Now start gostp with following options... "
 printf "\n"
