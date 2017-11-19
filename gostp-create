@@ -39,6 +39,18 @@ if [ $? -eq 0 ]; then
 EOF
   fi
 
+  # init git
+  if [ $skip_git_actions -eq 0 ]; then
+    cd $dest
+    git_was_initialied=$(([ -d .git ] && echo .git) || git rev-parse --git-dir 2> /dev/null)
+    if [ ! "$git_was_initialied" ]; then
+      echo "[i] Not found git repo. Integrating git ..."
+      git init
+      git add . && git commit -m "[Initialized - $name]"
+    fi
+    cd -
+  fi
+
   #print app path (if succeess)
   echo "$dest"
 else

@@ -20,17 +20,31 @@ then
   exit 1
 fi
 
-git xcp beta StickerPackExtension
-git xcp beta $name
+#git xcp beta
+if [ $skip_git_actions -eq 0 ]; then
+  git xcp beta StickerPackExtension && git xcp beta $name
+fi
+
 fastlane gym --scheme StickerPackExtension && fastlane deliver -f
 
 if [ $? -eq 0 ]; then
+
+  if [ $skip_git_actions -eq 0 ]; then
+    cd $dest
+    git add . && git commit -m "[Updated - $name]"
+    cd -
+  fi
+
   echo "$dest"
 else
   echo "[!] Something wrong while build and upload binary!"
-  echo "[i] Reverting build vertions ..."
-  git xcp beta StickerPackExtension --revert
-  git xcp beta $name --revert
+
+  if [ $skip_git_actions -eq 0 ]; then
+    cd $dest_app_path
+    echo "[i] Reverting build vertions ..."
+    git xcp beta StickerPackExtension --revert && git xcp beta $name --revert
+    cd -
+  fi
 
   exit 1
 fi
