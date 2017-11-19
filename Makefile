@@ -9,6 +9,7 @@ all:
 install:
 	brew list apng2gif &>/dev/null || brew install apng2gif
 	brew list ffmpeg &>/dev/null || brew install ffmpeg
+	brew list apngasm &>/dev/null || brew install apngasm
 	git clone https://github.com/metasmile/git-xcp.git && cd git-xcp && make install && cd - && rm -rf ./git-xcp
 	install -d -m 0755 $(BIN_DIR)
 	install -m 0755 $(LOADER) $(BIN_DIR)
