@@ -1,23 +1,33 @@
-prefix = /usr/local
+prefix 		= /usr/local
 BIN_DIR   = $(prefix)/bin
+LIB_DIR   = $(prefix)/lib
+APP_DIR 	= $(LIB_DIR)/gostp
 LOADER    = gostp
-HEADERS   = _gostp-define _gostp-build
-COMMANDS  = gostp-build gostp-update gostp-create
 
 all:
 	@echo "usage: make [install|uninstall]"
 
+test:
+	make install && make uninstall
+
 install:
+	gem list | grep "^fastlane " || sudo gem install fastlane
 	brew list apng2gif &>/dev/null || brew install apng2gif
 	brew list ffmpeg &>/dev/null || brew install ffmpeg
 	brew list apngasm &>/dev/null || brew install apngasm
-	git clone https://github.com/metasmile/git-xcp.git && cd git-xcp && make install && cd - && rm -rf ./git-xcp
-	install -d -m 0755 $(BIN_DIR)
-	install -m 0755 $(LOADER) $(BIN_DIR)
-	install -m 0644 $(HEADERS) $(BIN_DIR)
-	install -m 0644 $(COMMANDS) $(BIN_DIR)
+
+	git clone https://github.com/metasmile/git-xcp.git $(CURDIR)/git-xcp && \
+	cd $(CURDIR)/git-xcp && \
+	make install >/dev/null 2>&1 && \
+	cd $(CURDIR) && \
+	rm -rf $(CURDIR)/git-xcp
+
+	rsync -av --exclude=".git*" --delete $(CURDIR) $(LIB_DIR)
+	chmod -R +r $(APP_DIR)
+	chmod +x $(APP_DIR)/$(LOADER)
+
+	ln -fs $(APP_DIR)/$(LOADER) $(BIN_DIR)
 
 uninstall:
-	test -d $(BIN_DIR) && \
-	cd $(BIN_DIR) && \
-	rm -f $(LOADER) $(HEADERS) $(COMMANDS)
+	rm -rf $(APP_DIR)
+	unlink $(BIN_DIR)/$(LOADER)
