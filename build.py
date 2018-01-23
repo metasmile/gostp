@@ -92,15 +92,19 @@ def main():
 			sys.exit(1)
 
 	#phase 2: replace file names
-	for path, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
-		file = os.path.basename(path)
-		if path==dest_app_path or file.startswith("."):
-			continue
+	for dir, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
+		for path in [dir] + [os.path.join(dir,f) for f in files]:
+			file = os.path.basename(path)
 
-		for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
-			if k in file:
-				new_path = path.replace(k, v)
-				os.rename(path, new_path)
+			if path==dest_app_path or file.startswith("."):
+				continue
+
+			print file, path
+
+			for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
+				if k in file:
+					new_path = path.replace(k, v)
+					os.rename(path, new_path)
 
 	#phase 3: replace file content
 	for path, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
