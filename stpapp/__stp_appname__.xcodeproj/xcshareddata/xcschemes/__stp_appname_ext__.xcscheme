@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9258E8A31D91C97900B3120F"
-               BuildableName = "StickerPackExtension.appex"
-               BlueprintName = "StickerPackExtension"
+               BuildableName = "__stp_appname_ext__.appex"
+               BlueprintName = "__stp_appname_ext__"
                ReferencedContainer = "container:__stp_appname__.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -49,8 +49,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9258E8A31D91C97900B3120F"
-            BuildableName = "StickerPackExtension.appex"
-            BlueprintName = "StickerPackExtension"
+            BuildableName = "__stp_appname_ext__.appex"
+            BlueprintName = "__stp_appname_ext__"
             ReferencedContainer = "container:__stp_appname__.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

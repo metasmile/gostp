@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9258E8A51D91C97900B3120F /* StickerPackExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9258E8A41D91C97900B3120F /* StickerPackExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9258E8A51D91C97900B3120F /* __stp_appname_ext__.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 9258E8A41D91C97900B3120F /* __stp_appname_ext__.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9258E8A91D91C97900B3120F /* Stickers.xcstickers in Resources */ = {isa = PBXBuildFile; fileRef = 9258E8A81D91C97900B3120F /* Stickers.xcstickers */; };
 		9258E8AA1D91C97900B3120F /* Stickers.xcstickers in Resources */ = {isa = PBXBuildFile; fileRef = 9258E8A81D91C97900B3120F /* Stickers.xcstickers */; };
 /* End PBXBuildFile section */
@@ -18,7 +18,7 @@
 			containerPortal = 9258E89A1D91C97800B3120F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9258E8A31D91C97900B3120F;
-			remoteInfo = StickerPackExtension;
+			remoteInfo = __stp_appname_ext__;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -29,7 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				9258E8A51D91C97900B3120F /* StickerPackExtension.appex in Embed App Extensions */,
+				9258E8A51D91C97900B3120F /* __stp_appname_ext__.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,8 +38,8 @@
 
 /* Begin PBXFileReference section */
 		9258E8A01D91C97900B3120F /* __stp_appname__.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = __stp_appname__.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9258E8A41D91C97900B3120F /* StickerPackExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = StickerPackExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		9258E8A81D91C97900B3120F /* Stickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; name = Stickers.xcstickers; path = StickerPackExtension/Stickers.xcstickers; sourceTree = "<group>"; };
+		9258E8A41D91C97900B3120F /* __stp_appname_ext__.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = __stp_appname_ext__.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9258E8A81D91C97900B3120F /* Stickers.xcstickers */ = {isa = PBXFileReference; lastKnownFileType = folder.stickers; name = Stickers.xcstickers; path = __stp_appname_ext__/Stickers.xcstickers; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -55,7 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				9258E8A01D91C97900B3120F /* __stp_appname__.app */,
-				9258E8A41D91C97900B3120F /* StickerPackExtension.appex */,
+				9258E8A41D91C97900B3120F /* __stp_appname_ext__.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,9 +80,9 @@
 			productReference = 9258E8A01D91C97900B3120F /* __stp_appname__.app */;
 			productType = "com.apple.product-type.application.messages";
 		};
-		9258E8A31D91C97900B3120F /* StickerPackExtension */ = {
+		9258E8A31D91C97900B3120F /* __stp_appname_ext__ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9258E8AD1D91C97900B3120F /* Build configuration list for PBXNativeTarget "StickerPackExtension" */;
+			buildConfigurationList = 9258E8AD1D91C97900B3120F /* Build configuration list for PBXNativeTarget "__stp_appname_ext__" */;
 			buildPhases = (
 				9258E8A21D91C97900B3120F /* Resources */,
 			);
@@ -90,9 +90,9 @@
 			);
 			dependencies = (
 			);
-			name = StickerPackExtension;
-			productName = StickerPackExtension;
-			productReference = 9258E8A41D91C97900B3120F /* StickerPackExtension.appex */;
+			name = __stp_appname_ext__;
+			productName = __stp_appname_ext__;
+			productReference = 9258E8A41D91C97900B3120F /* __stp_appname_ext__.appex */;
 			productType = "com.apple.product-type.app-extension.messages-sticker-pack";
 		};
 /* End PBXNativeTarget section */
@@ -129,7 +129,7 @@
 			projectRoot = "";
 			targets = (
 				9258E89F1D91C97800B3120F /* __stp_appname__ */,
-				9258E8A31D91C97900B3120F /* StickerPackExtension */,
+				9258E8A31D91C97900B3120F /* __stp_appname_ext__ */,
 			);
 		};
 /* End PBXProject section */
@@ -156,7 +156,7 @@
 /* Begin PBXTargetDependency section */
 		9258E8A71D91C97900B3120F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9258E8A31D91C97900B3120F /* StickerPackExtension */;
+			target = 9258E8A31D91C97900B3120F /* __stp_appname_ext__ */;
 			targetProxy = 9258E8A61D91C97900B3120F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -273,7 +273,7 @@
 				DEVELOPMENT_TEAM = DAGHHLSPPQ;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
-				INFOPLIST_FILE = StickerPackExtension/Info.plist;
+				INFOPLIST_FILE = __stp_appname_ext__/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = __stp_bundleid_ext__;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = __stp_provision_uuid_debug_ext__;
@@ -292,7 +292,7 @@
 				DEVELOPMENT_TEAM = DAGHHLSPPQ;
 				ENABLE_BITCODE = NO;
 				ENABLE_ON_DEMAND_RESOURCES = NO;
-				INFOPLIST_FILE = StickerPackExtension/Info.plist;
+				INFOPLIST_FILE = __stp_appname_ext__/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = __stp_bundleid_ext__;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = __stp_provision_uuid_release_ext__;
@@ -348,7 +348,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9258E8AD1D91C97900B3120F /* Build configuration list for PBXNativeTarget "StickerPackExtension" */ = {
+		9258E8AD1D91C97900B3120F /* Build configuration list for PBXNativeTarget "__stp_appname_ext__" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9258E8AE1D91C97900B3120F /* Debug */,

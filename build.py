@@ -48,9 +48,10 @@ def main():
 		"__stp_appdisplayname__": args["display_name"] or "Sticker",
 		"__stp_bundleid__": args["bundle_id"] or "com.gostp.sticker",
 
-		"__stp_appname_ext__": args["extension_name"] or "Sticker Pack",
+		"__stp_appname_ext__": args["extension_name"] or args["name"]+"Pack",
 		"__stp_bundleid_ext__": args["extension_bundle_id"] or "com.gostp.sticker.pack"
 	}
+	dest_app_ext_name = app_template_config_dict["__stp_appname_ext__"]
 
 	src_path = expanduser(args["src_path"])
 	if not os.path.exists(src_path):
@@ -76,6 +77,7 @@ def main():
 
 	#phase 0: build APNGs
 	print "[i] Compiling APNGs and copying ..."
+	print src_path, dest_path
 	convert_to_apng(src_path, dest_path)
 
 	print "[i] Generating Xcode Project ..."
@@ -93,13 +95,11 @@ def main():
 
 	#phase 2: replace file names
 	for dir, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
-		for path in [dir] + [os.path.join(dir,f) for f in files]:
+		for path in [os.path.join(dir,f) for f in files] + [dir]: # [!] rename subfile -> parent dir
 			file = os.path.basename(path)
 
 			if path==dest_app_path or file.startswith("."):
 				continue
-
-			print file, path
 
 			for k, v in [(i,app_template_config_dict[i]) for i in app_template_config_dict]:
 				if k in file:
@@ -135,16 +135,17 @@ def main():
 			wcur.close()
 
 	#phase 4: insert sticker files
-	src_stickerpack_path = os.path.join(__STP_APP_PATH__, "StickerPackExtension", "Stickers.xcstickers", "StickerPack.stickerpack")
+	__TEMP_STICKER_PACK_DIR_NAME__ = "__stp_appname_ext__"
+	__TEMP_STICKER_PACK_NAME__ = "__stickername__.sticker"
 
-	dest_stickerpack_path = os.path.join(dest_app_path, "StickerPackExtension", "Stickers.xcstickers", "StickerPack.stickerpack")
+	src_stickerpack_path = os.path.join(__STP_APP_PATH__, __TEMP_STICKER_PACK_DIR_NAME__, "Stickers.xcstickers", "StickerPack.stickerpack")
+
+	dest_stickerpack_path = os.path.join(dest_app_path, dest_app_ext_name, "Stickers.xcstickers", "StickerPack.stickerpack")
 	if not os.path.exists(dest_stickerpack_path):
 		print "[i] Destination sticker pack path does not exist. Creating ..."
 		os.makedirs(dest_stickerpack_path)
 
 	# listing and copy APNGs
-	__TEMP_STICKER_PACK_NAME__ = "__stickername__.sticker"
-
 	__DEST_TEMP_STICKER_PACK_PATH__ = os.path.join(dest_stickerpack_path, __TEMP_STICKER_PACK_NAME__)
 
 	__SRC_TEMP_STICKER_PACK_PATH__ = os.path.join(src_stickerpack_path, __TEMP_STICKER_PACK_NAME__)

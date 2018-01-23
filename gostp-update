@@ -22,10 +22,10 @@ fi
 
 #git xcp beta
 if [ $skip_git_actions -eq 0 ]; then
-  git xcp beta StickerPackExtension && git xcp beta $name
+  git xcp beta "$extension_name" && git xcp beta $name
 fi
 
-fastlane gym --scheme StickerPackExtension && fastlane deliver -f
+fastlane gym --scheme "$extension_name" && fastlane deliver -f
 
 if [ $? -eq 0 ]; then
 
@@ -42,7 +42,7 @@ else
   if [ $skip_git_actions -eq 0 ]; then
     cd $dest_app_path
     echo "[i] Reverting build vertions ..."
-    git xcp beta StickerPackExtension --revert && git xcp beta $name --revert
+    git xcp beta "$extension_name" --revert && git xcp beta $name --revert
     cd -
   fi
 

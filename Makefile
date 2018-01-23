@@ -1,7 +1,7 @@
 prefix 		= /usr/local
 BIN_DIR   = $(prefix)/bin
-LIB_DIR   = $(prefix)/lib
-APP_DIR 	= $(LIB_DIR)/gostp
+# LIB_DIR   = $(prefix)/lib
+# APP_DIR 	= $(LIB_DIR)/gostp
 LOADER    = gostp
 
 all:
@@ -22,12 +22,17 @@ install:
 	cd $(CURDIR) && \
 	rm -rf $(CURDIR)/git-xcp
 
-	rsync -av --exclude=".git*" --delete $(CURDIR) $(LIB_DIR)
-	chmod -R +r $(APP_DIR)
-	chmod +x $(APP_DIR)/$(LOADER)
-
-	ln -fs $(APP_DIR)/$(LOADER) $(BIN_DIR)
+	rsync -av --exclude=".git*" --delete $(CURDIR)/* $(BIN_DIR)
+	# chmod -R +r $(APP_DIR)
+	# chmod +x $(APP_DIR)/$(LOADER)
+	# ln -fs $(APP_DIR)/$(LOADER) $(BIN_DIR)
+	# @$(foreach cmd,$(COMMANDS),ln -fs $(APP_DIR)/$(cmd) $(BIN_DIR);)
 
 uninstall:
-	rm -rf $(APP_DIR)
-	unlink $(BIN_DIR)/$(LOADER)
+	target_dirs=(apngen git-xcp stpapp)
+	$(foreach dir,$(target_dirs),rm -rf $(BIN_DIR)/$(dir);)
+
+	target_files=(_gostp-build _gostp-define build.py gostp gostp-build gostp-update gostp-create)
+	# @$(foreach file,$(target_files),rm -f $(BIN_DIR)/$(file);)
+	$(foreach file, $(target_files), rm -f $(BIN_DIR)/$(file);)
+	# unlink $(BIN_DIR)/$(LOADER)

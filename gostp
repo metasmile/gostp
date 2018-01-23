@@ -38,9 +38,10 @@ main() {
 			;;
 	esac
 
-	local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+  local workingdir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 	if [ ! -e "$workingdir/gostp-$subcommand" ]; then
-		usage; exit 1
+    echo "[!]Following command file does not exist: " "$workingdir/gostp-$subcommand"
+		exit 1
 	fi
 
 	source "$workingdir/gostp-$subcommand" "$@"
