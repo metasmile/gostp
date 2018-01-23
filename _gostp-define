@@ -62,7 +62,8 @@ dest_app_relative_path="${dest_app_relative_path:-app}"
 dest_app_path="$dest/$dest_app_relative_path"
 display_name="${display_name:-$name}"
 itc_display_name="${itc_display_name:-${display_name:-$name}}"
-extension_name="${extension_name:-$name Pack}"
+_extension_name_default="$name"Pack
+extension_name="${extension_name:-$_extension_name_default}"
 extension_bundle_id="${extension_bundle_id:-"$bundle_id".pack}"
 src="${src:-$(pwd)}"
 # perf options
