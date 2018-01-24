@@ -8,6 +8,11 @@ python $STP_PATH/build.py "$src" "$dest" \
 --extension-bundle-id "$extension_bundle_id" \
 --dest-relative-path "$dest_app_path"
 
+build_result=$?
+if [ $build_result -ne 0 ]; then
+  echo "[!] Error when building: $dest"
+  exit $build_result
+fi
 cd "$dest"
 
 if [ $skip_export_gif_mp4 -eq 0 ]; then
