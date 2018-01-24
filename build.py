@@ -96,7 +96,7 @@ def main():
             sys.exit(1)
 
     # phase 2: replace file names
-    for dir, subdirs, files in list(os.walk(dest_app_path, topdown=True)):
+    for dir, subdirs, files in list(os.walk(dest_app_path, topdown=False)):
         for path in [os.path.join(dir, f) for f in files] + [dir]:  # [!] rename subfile -> parent dir
             file = os.path.basename(path)
 
