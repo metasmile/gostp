@@ -19,7 +19,7 @@ produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extens
 sigh(app_identifier:"$bundle_id")
 sigh(app_identifier:"$extension_bundle_id")
 update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
-update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$extension_bundle_id.mobileprovision", target_filter:"StickerPackExtension")
+update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$extension_bundle_id.mobileprovision", target_filter:"$extension_name")
 ${fastfile_content}
 EOF
 fi
