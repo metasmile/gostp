@@ -12,6 +12,8 @@ from os.path import expanduser
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
+__INTERVALI_SPLITTER__ = "_"
+
 def convert_to_apng(src_path, dest_path, is_verbose=False):
 	if is_verbose:
 		print "Start to export...", src_path, "=>" ,dest_path
@@ -22,18 +24,38 @@ def convert_to_apng(src_path, dest_path, is_verbose=False):
 	filter_only_dirs = lambda f: os.path.isdir(dir_abs_path(f)) and not f.startswith('.')
 
 	target_dirs = filter(filter_only_dirs, dirs(src_path))
-	targets = [(d, dir_abs_path(d), d.split('_'), dirs(dir_abs_path(d))) for d in target_dirs]
-	targets = filter(lambda args: len(args[2])==2 and len(args[3]), targets)
+	targets = []
+	for d in target_dirs:
+		_ds = d.split(__INTERVALI_SPLITTER__)
+		if not len(_ds):
+			continue
+
+		_dirs = dirs(dir_abs_path(d))
+		if not len(_dirs):
+			continue
+
+		_item = {}
+		_item["dirname"] = d
+		_item["dirpath"] = dir_abs_path(d)
+		_item["filename"] = _ds[0]
+		_item["interval"] = _ds[1] if len(_ds)>1 else "0.2"
+		_item["files"] = _dirs
+
+		targets.append(_item)
 
 	FNULL = None if is_verbose else open(os.devnull, 'w')
 
-	for dirname, dirpath, scheme, files in targets:
-		packname = scheme[0]
-		frame_interval = str(int(float(scheme[1])*1000))
+	for item in targets:
+		dirpath = item["dirpath"]
+		packname = item["filename"]
+		frame_interval = str(int(float(item["interval"])*1000))
+
 		output_apng_file = os.path.join(dest_path, (packname+'.png'))
 		subprocess.call(['apngasm','-o', output_apng_file, os.path.join(dirpath, '*.png'),'-d',frame_interval,'-F'], stdout=FNULL, stderr=subprocess.STDOUT)
+
 		if is_verbose:
 			print output_apng_file
+
 	return dest_path
 
 def main():
