@@ -9,6 +9,7 @@ from shutil import copyfile
 import sys
 import codecs
 from os.path import expanduser
+import glob
 sys.stdout = codecs.getwriter('utf8')(sys.stdout)
 sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
@@ -51,7 +52,16 @@ def convert_to_apng(src_path, dest_path, is_verbose=False):
 		frame_interval = str(int(float(item["interval"])*1000))
 
 		output_apng_file = os.path.join(dest_path, (packname+'.png'))
-		subprocess.call(['apngasm','-o', output_apng_file, os.path.join(dirpath, '*.png'),'-d',frame_interval,'-F'], stdout=FNULL, stderr=subprocess.STDOUT)
+
+		src_pngs_path_glob = os.path.join(dirpath, '*.png')
+		src_pngs_paths = glob.glob(src_pngs_path_glob)
+
+		if len(src_pngs_paths)>1:
+			subprocess.call(['apngasm','-o', output_apng_file, src_pngs_path_glob,'-d',frame_interval,'-F'], stdout=FNULL, stderr=subprocess.STDOUT)
+		else:
+			for dest_png_path in src_pngs_paths:
+				subprocess.call(['mkdir', dest_path], stdout=FNULL, stderr=subprocess.STDOUT)
+				subprocess.call(['cp','-f', dest_png_path, output_apng_file], stdout=FNULL, stderr=subprocess.STDOUT)
 
 		if is_verbose:
 			print output_apng_file
