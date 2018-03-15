@@ -15,6 +15,13 @@ sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 __INTERVALI_SPLITTER__ = "_"
 
+def is_float(str):
+    try:
+        float(str)
+        return True
+    except ValueError:
+        return False
+
 def convert_to_apng(src_path, dest_path, is_verbose=False):
 	if is_verbose:
 		print "Start to export...", src_path, "=>" ,dest_path
@@ -39,7 +46,7 @@ def convert_to_apng(src_path, dest_path, is_verbose=False):
 		_item["dirname"] = d
 		_item["dirpath"] = dir_abs_path(d)
 		_item["filename"] = _ds[0]
-		_item["interval"] = _ds[1] if len(_ds)>1 else "0.2"
+		_item["interval"] = _ds[1] if len(_ds)>1 and is_float(_ds[1]) else "0.2"
 		_item["files"] = _dirs
 
 		targets.append(_item)
