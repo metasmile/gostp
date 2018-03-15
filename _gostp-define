@@ -73,6 +73,7 @@ skip_git_actions=${skip_git_actions:-0};
 fastfile_path="$dest_app_path/fastlane/Fastfile"
 fastfile_init_flag="#Fastfile@gostp-init-flag"
 fastfile_created_flag="#Fastfile@gostp-created-flag"
+appfile_path="$dest_app_path/fastlane/Appfile"
 
 printf "[i] Now start gostp with following options... "
 printf "\n"

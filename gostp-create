@@ -8,6 +8,11 @@ cd "$dest_app_path"
 
 fastlane init -u $user_id
 
+if [ $? -eq 1 ]; then
+  echo "[!] Something wroing while configure and register a project!"
+  exit 1
+fi
+
 if ! grep -qE "$fastfile_init_flag" $fastfile_path
 then
   fastfile_content=$(cat "$fastfile_path")
@@ -23,12 +28,13 @@ ${fastfile_content}
 EOF
 fi
 
+#replace extension bundle id to wrapped app bundle id
+sed -i -e 's/app_identifier("$extension_bundle_id")/app_identifier("$bundle_id")/g' $appfile_path
+#touch itc was succeed
+sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
 fastlane release
 
 if [ $? -eq 0 ]; then
-  #touch itc was succeed
-  sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
-
   #insert finshed flag
   if ! grep -qE "$fastfile_created_flag" $fastfile_path
   then
