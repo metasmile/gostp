@@ -37,12 +37,12 @@ do
       extension_bundle_id=$2
       shift
       ;;
-    --skip-export-gif-mp4)
-      skip_export_gif_mp4=1
-      ;;
-    --skip-git-actions)
-      skip_git_actions=1
-      ;;
+    # --skip-export-gif-mp4)
+    #   skip_export_gif_mp4=1
+    #   ;;
+    # --skip-git-actions)
+    #   skip_git_actions=1
+    #   ;;
     *)
       params="$params $1"
       ;;
@@ -90,4 +90,5 @@ printf "\n%s%s %s" "Source Path" ":" "$src"
 printf "\n%s%s %s" "Destination Path" ":" "$dest"
 printf "\n%s%s %s" "Destination Xcode Project Path" ":" "$dest_app_path"
 printf "\n%s%s %s" "Skip Exporting GIF/mp4" ":" "$skip_export_gif_mp4"
+printf "\n%s%s %s" "Skip Git Actions" ":" "$skip_git_actions"
 printf "\n\n"
