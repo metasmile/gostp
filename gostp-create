@@ -32,18 +32,18 @@ fi
 sed -i -e 's/app_identifier("$extension_bundle_id")/app_identifier("$bundle_id")/g' $appfile_path
 #touch itc was succeed
 sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
+#touch created flag
+if ! grep -qE "$fastfile_created_flag" $fastfile_path
+then
+  fastfile_content=$(cat "$fastfile_path")
+  cat >$fastfile_path <<EOF
+$fastfile_created_flag
+${fastfile_content}
+EOF
+
 fastlane release
 
 if [ $? -eq 0 ]; then
-  #insert finshed flag
-  if ! grep -qE "$fastfile_created_flag" $fastfile_path
-  then
-    fastfile_content=$(cat "$fastfile_path")
-    cat >$fastfile_path <<EOF
-  $fastfile_created_flag
-  ${fastfile_content}
-EOF
-  fi
 
   # init git
   if [ $skip_git_actions -eq 0 ]; then
@@ -53,6 +53,8 @@ EOF
       echo "[i] Not found git repo. Integrating git ..."
       git init
       git add . && git commit -m "[Initialized - $name]"
+    else
+      echo "[i] Found git repo."
     fi
     cd -
   fi
