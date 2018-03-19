@@ -38,7 +38,7 @@ do
       shift
       ;;
     # --skip-export-gif-mp4)
-    #   skip_export_gif_mp4=1
+    #   export_gif_mp4=1
     #   ;;
     # --skip-git-actions)
     #   skip_git_actions=1
@@ -67,7 +67,7 @@ extension_name="${extension_name:-$_extension_name_default}"
 extension_bundle_id="${extension_bundle_id:-"$bundle_id".pack}"
 src="${src:-$(pwd)}"
 # perf options
-skip_export_gif_mp4=${skip_export_gif_mp4:-0};
+export_gif_mp4=${export_gif_mp4:-0};
 skip_git_actions=${skip_git_actions:-0};
 # fastlane
 fastfile_path="$dest_app_path/fastlane/Fastfile"
@@ -89,6 +89,6 @@ printf "\n%s%s %s" "Extension Bundle Id" ":" "$extension_bundle_id"
 printf "\n%s%s %s" "Source Path" ":" "$src"
 printf "\n%s%s %s" "Destination Path" ":" "$dest"
 printf "\n%s%s %s" "Destination Xcode Project Path" ":" "$dest_app_path"
-printf "\n%s%s %s" "Skip Exporting GIF/mp4" ":" "$skip_export_gif_mp4"
+printf "\n%s%s %s" "Exporting GIF/mp4" ":" "$export_gif_mp4"
 printf "\n%s%s %s" "Skip Git Actions" ":" "$skip_git_actions"
 printf "\n\n"
