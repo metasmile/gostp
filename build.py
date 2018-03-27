@@ -24,6 +24,7 @@ def main():
     parser.add_argument("dest_path", help="Target destination path.", nargs="+")
 
     parser.add_argument("-n", "--name", help="App Name (Project Name)", nargs="*")
+    parser.add_argument("-v", "--version", help="App Version String", nargs="*")
     parser.add_argument("--display-name", help="App Display Name", nargs="*")
     parser.add_argument("-i", "--bundle-id", help="App Bundle Id", nargs="*")
     parser.add_argument("--extension-name", help="Extension Name", nargs="*")
@@ -49,11 +50,13 @@ def main():
     app_template_config_dict = {
         "__stp_appname__": args["name"] or "Sticker",
         "__stp_appdisplayname__": args["display_name"] or "Sticker",
+        "__stp_version__": args["version"] or "1.0",
         "__stp_bundleid__": args["bundle_id"] or "com.gostp.sticker",
 
         "__stp_appname_ext__": args["extension_name"] or args["name"] + "Pack",
         "__stp_bundleid_ext__": args["extension_bundle_id"] or "com.gostp.sticker.pack"
     }
+
     dest_app_ext_name = app_template_config_dict["__stp_appname_ext__"]
 
     src_path = expanduser(args["src_path"])
@@ -71,8 +74,9 @@ def main():
     # phase -1: clean up
     print "[i] Clean up ..."
     __CLEANING_TARGET_PATH__ = [
-        os.path.join(__STP_APP_PATH__, "DerivedData"),
-        os.path.join(dest_app_path, "DerivedData")
+        #caches
+        os.path.join(__STP_APP_PATH__, "DerivedData")
+        , os.path.join(dest_app_path, "DerivedData")
     ]
     for clean_dir in __CLEANING_TARGET_PATH__:
         if os.path.exists(clean_dir):

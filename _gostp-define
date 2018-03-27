@@ -25,6 +25,10 @@ do
       display_name=$2
       shift
       ;;
+    -v|--version)
+      version=$2
+      shift
+      ;;
     -i|--itc-display-name)
       itc_display_name=$2
       shift
@@ -60,6 +64,8 @@ dest=${params[3]}
 # option: *
 dest_app_relative_path="${dest_app_relative_path:-app}"
 dest_app_path="$dest/$dest_app_relative_path"
+_version_default="1.0"
+version="${version:-$_version_default}"
 display_name="${display_name:-$name}"
 itc_display_name="${itc_display_name:-${display_name:-$name}}"
 _extension_name_default="$name"Pack
@@ -79,6 +85,7 @@ printf "[i] Now start gostp with following options... "
 printf "\n"
 printf "\n%s%s %s" "User Id" ":" "$user_id"
 printf "\n%s%s %s" "Xcode Project Name" ":" "$name"
+printf "\n%s%s %s" "Version" ":" "$version"
 printf "\n%s%s %s" "Display Name" ":" "$display_name"
 printf "\n%s%s %s" "iTC/AppStore Name" ":" "$itc_display_name"
 printf "\n%s%s %s" "Bundle Id" ":" "$bundle_id"
