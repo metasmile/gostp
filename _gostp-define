@@ -41,12 +41,14 @@ do
       extension_bundle_id=$2
       shift
       ;;
-    # --skip-export-gif-mp4)
-    #   export_gif_mp4=1
-    #   ;;
-    # --skip-git-actions)
-    #   skip_git_actions=1
-    #   ;;
+    --export-gif-mp4)
+      export_gif_mp4=1
+      shift
+      ;;
+    --skip-git-actions)
+      skip_git_actions=1
+      shift
+      ;;
     *)
       params="$params $1"
       ;;
