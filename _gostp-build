@@ -14,6 +14,11 @@ if [ $build_result -ne 0 ]; then
   echo "[!] Error while building: $dest"
   exit $build_result
 fi
+
+# set version
+cd "$dest_app_path"
+agvtool new-marketing-version "$version" &>/dev/null
+cd -
 cd "$dest"
 
 if [ $export_gif_mp4 -eq 1 ]; then
