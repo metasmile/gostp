@@ -31,6 +31,7 @@ def main():
     parser.add_argument("-e", "--extension-bundle-id", help="Extension Bundle Id", nargs="*")
 
     parser.add_argument("--dest-relative-path", help="Destination app relative path", nargs="*")
+    parser.add_argument("--grid-size", help="Sticker Grid Size", nargs="*")
     parser.add_argument("--clean-app", type=bool, help="Clean already built app files before start.", default=False,
                         nargs="*")
 
@@ -70,6 +71,11 @@ def main():
         os.makedirs(dest_path)
 
     dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_relative_path"])
+
+    # get sticker grid size setting
+    app_sticker_grid_size = args["grid_size"]
+    if not app_sticker_grid_size in ["small", "regular", "large"]:
+        app_sticker_grid_size = "regular"
 
     # phase -1: clean up
     print "[i] Clean up ..."
@@ -185,7 +191,21 @@ def main():
     # generate root Contents.json of Stickerpack
     src_stickerpack_contents_path = os.path.join(src_stickerpack_path, "Contents.json")
     src_stickerpack_contents = json.load(codecs.open(src_stickerpack_contents_path, "r", "utf-8"))
-    src_stickerpack_contents["stickers"] = [{"filename": os.path.basename(e)} for e in
+
+    # configure
+    # "properties": {
+    #      "grid-size": "large"
+    #      "grid-size": "regular"
+    #      "grid-size": "small"
+    # },
+    __GRID_SIZE_KEY__ = "grid-size"
+    __PROPERTIES_KEY__= "properties"
+    __STICKERS_KEY__ = "stickers"
+    if not __PROPERTIES_KEY__ in src_stickerpack_contents:
+        src_stickerpack_contents[__PROPERTIES_KEY__] = {}
+
+    src_stickerpack_contents[__PROPERTIES_KEY__][__GRID_SIZE_KEY__] = app_sticker_grid_size
+    src_stickerpack_contents[__STICKERS_KEY__] = [{"filename": os.path.basename(e)} for e in
                                             glob.glob(os.path.join(dest_stickerpack_path, "*.sticker"))]
 
     dest_stickerpack_contents_path = os.path.join(dest_stickerpack_path, "Contents.json")
@@ -194,7 +214,6 @@ def main():
         w.close()
 
     return dest_app_path
-
 
 def istextfile(fileobj, blocksize=512):
     PY3 = sys.version_info[0] == 3

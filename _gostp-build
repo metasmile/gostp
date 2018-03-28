@@ -7,7 +7,8 @@ python $STP_PATH/build.py "$src" "$dest" \
 --bundle-id "$bundle_id" \
 --extension-name "$extension_name" \
 --extension-bundle-id "$extension_bundle_id" \
---dest-relative-path "$dest_app_path"
+--dest-relative-path "$dest_app_path" \
+--grid-size "$grid_size"
 
 build_result=$?
 if [ $build_result -ne 0 ]; then
