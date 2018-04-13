@@ -14,6 +14,7 @@ install:
 	brew list ffmpeg &>/dev/null || brew install ffmpeg
 	brew list apngasm &>/dev/null || brew install apngasm
 
+	# (git config must be to avoid \r\n ) git config --global core.autocrlf input  
 	git clone https://github.com/metasmile/git-xcp.git $(CURDIR)/git-xcp && \
 	cd $(CURDIR)/git-xcp && \
 	make install >/dev/null 2>&1 && \

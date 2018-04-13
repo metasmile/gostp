@@ -31,8 +31,8 @@ fi
 #replace extension bundle id to wrapped app bundle id
 sed -i -e 's/app_identifier("$extension_bundle_id")/app_identifier("$bundle_id")/g' $appfile_path
 #touch itc was succeed
-sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
-#touch created flag
+# sed -i -e 's/skip_itc:false/skip_itc:true/g' $fastfile_path
+#touch created fla
 if ! grep -qE "$fastfile_created_flag" $fastfile_path
 then
   fastfile_content=$(cat "$fastfile_path")
