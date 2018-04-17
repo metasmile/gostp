@@ -13,12 +13,12 @@ then
 fi
 
 #insert finshed flag
-echo $(grep -qE "$fastfile_created_flag" $fastfile_path)
-if ! grep -qE "$fastfile_created_flag" $fastfile_path
-then
-  echo "[!] This project has not been initialized. Complete '$ gostp create' first. "
-  exit 1
-fi
+# echo $(grep -qE "$fastfile_created_flag" $fastfile_path)
+# if ! grep -qE "$fastfile_created_flag" $fastfile_path
+# then
+#   echo "[!] This project has not been initialized. Complete '$ gostp create' first. "
+#   exit 1
+# fi
 
 #git xcp beta
 if [ $skip_git_actions -eq 0 ]; then
