@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from time import mktime
 from os.path import expanduser
 import shutil
+from distutils.dir_util import copy_tree
 import json
 import glob
 from apngen.apngen import convert_to_apng
@@ -158,6 +159,12 @@ def main():
     if not os.path.exists(dest_stickerpack_path):
         print "[i] Destination sticker pack path does not exist. Creating ..."
         os.makedirs(dest_stickerpack_path)
+
+    # phase 5: copy iconset if it has existed
+    src_stickericon_path = os.path.join(src_path, "@iconset")
+    if os.path.exists(src_stickericon_path):
+        dest_stickericon_path = os.path.join(dest_app_path, dest_app_ext_name, "Stickers.xcstickers", "iMessage App Icon.stickersiconset")
+        copy_tree(src_stickericon_path, dest_stickericon_path)
 
     # listing and copy APNGs
     __DEST_TEMP_STICKER_PACK_PATH__ = os.path.join(dest_stickerpack_path, __TEMP_STICKER_PACK_NAME__)
