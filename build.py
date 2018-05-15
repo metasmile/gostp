@@ -44,8 +44,9 @@ def main():
     __STP_PATH__ = os.path.dirname(__file__)
     __STP_APP_PATH__ = os.path.join(__STP_PATH__, "stpapp")
     __STP_CONFIG__ = {
-        "stp_app_relative_path": args["dest_relative_path"] or "app",
-        "stp_allowing_stickerpack_exts": ["png", "gif", "jpg"]
+        "stp_app_relative_path": args["dest_relative_path"] or "app"
+        , "stp_allowing_stickerpack_exts": ["png", "gif", "jpg"]
+        , "stp_complied_resource_relative_path": "res"
     }
     __STP_APP_CLEAN__ = args["clean_app"] is not False
 
@@ -72,6 +73,7 @@ def main():
         os.makedirs(dest_path)
 
     dest_app_path = os.path.join(dest_path, __STP_CONFIG__["stp_app_relative_path"])
+    dest_res_path = os.path.join(dest_path, __STP_CONFIG__["stp_complied_resource_relative_path"])
 
     # get sticker grid size setting
     app_sticker_grid_size = args["grid_size"]
@@ -84,14 +86,16 @@ def main():
         #caches
         os.path.join(__STP_APP_PATH__, "DerivedData")
         , os.path.join(dest_app_path, "DerivedData")
+        , dest_res_path
     ]
+    ## clean up cache
     for clean_dir in __CLEANING_TARGET_PATH__:
         if os.path.exists(clean_dir):
             shutil.rmtree(clean_dir)
 
     # phase 0: build APNGs
     print "[i] Compiling APNGs and copying ..."
-    convert_to_apng(src_path, dest_path)
+    convert_to_apng(src_path, dest_res_path)
 
     print "[i] Generating Xcode Project ..."
     # phase 1: copy
@@ -156,9 +160,13 @@ def main():
 
     dest_stickerpack_path = os.path.join(dest_app_path, dest_app_ext_name, "Stickers.xcstickers",
                                          "StickerPack.stickerpack")
+
     if not os.path.exists(dest_stickerpack_path):
         print "[i] Destination sticker pack path does not exist. Creating ..."
         os.makedirs(dest_stickerpack_path)
+    else:
+        print "[i] Clean up destination sticker pack path ..."
+        shutil.rmtree(dest_stickerpack_path)
 
     # phase 5: copy iconset if it has existed
     src_stickericon_path = os.path.join(src_path, "@iconset")
@@ -173,7 +181,7 @@ def main():
     __SRC_STICKER_PACK_CONTENTS_PATH__ = os.path.join(__SRC_TEMP_STICKER_PACK_PATH__, "Contents.json")
     __SRC_STICKER_PACK_CONTENTS__ = json.load(codecs.open(__SRC_STICKER_PACK_CONTENTS_PATH__, "r", "utf-8"))
 
-    sticker_image_src_path_list = sum([glob.glob(e) for e in [os.path.join(dest_path, "*." + ext) for ext in
+    sticker_image_src_path_list = sum([glob.glob(e) for e in [os.path.join(dest_res_path,  "*." + ext) for ext in
                                                               __STP_CONFIG__["stp_allowing_stickerpack_exts"]]], [])
     for sticker_image_src_path in sticker_image_src_path_list:
         sticker_filename = os.path.basename(sticker_image_src_path)
