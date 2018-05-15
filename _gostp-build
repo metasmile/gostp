@@ -8,7 +8,8 @@ python $STP_PATH/build.py "$src" "$dest" \
 --extension-name "$extension_name" \
 --extension-bundle-id "$extension_bundle_id" \
 --dest-relative-path "$dest_app_path" \
---grid-size "$grid_size"
+--grid-size "$grid_size" \
+--clean-stickers
 
 build_result=$?
 if [ $build_result -ne 0 ]; then

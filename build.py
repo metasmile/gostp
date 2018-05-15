@@ -35,6 +35,8 @@ def main():
     parser.add_argument("--grid-size", help="Sticker Grid Size", nargs="*")
     parser.add_argument("--clean-app", type=bool, help="Clean already built app files before start.", default=False,
                         nargs="*")
+    parser.add_argument("--clean-stickers", type=bool, help="Clean all sticker pack files before start.", default=False,
+                        nargs="*")
 
     args = vars(parser.parse_args())
     for ak, av in [(arg, args[arg]) for arg in args]:
@@ -49,6 +51,7 @@ def main():
         , "stp_complied_resource_relative_path": "res"
     }
     __STP_APP_CLEAN__ = args["clean_app"] is not False
+    __STP_STICKERS_CLEAN__ = args["clean_stickers"] is not False
 
     app_template_config_dict = {
         "__stp_appname__": args["name"] or "Sticker",
@@ -161,12 +164,14 @@ def main():
     dest_stickerpack_path = os.path.join(dest_app_path, dest_app_ext_name, "Stickers.xcstickers",
                                          "StickerPack.stickerpack")
 
+    if __STP_STICKERS_CLEAN__:
+        print "[i] Clean up destination sticker pack path ..."
+        shutil.rmtree(dest_stickerpack_path)
+
     if not os.path.exists(dest_stickerpack_path):
         print "[i] Destination sticker pack path does not exist. Creating ..."
         os.makedirs(dest_stickerpack_path)
     else:
-        print "[i] Clean up destination sticker pack path ..."
-        shutil.rmtree(dest_stickerpack_path)
 
     # phase 5: copy iconset if it has existed
     src_stickericon_path = os.path.join(src_path, "@iconset")
