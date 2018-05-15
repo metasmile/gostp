@@ -184,7 +184,7 @@ def main():
         if not os.path.exists(dest_sticker_image_path):
             os.makedirs(dest_sticker_image_path)
         # copy image file
-        shutil.copyfile(sticker_image_src_path, os.path.join(dest_sticker_image_path, sticker_filename))
+        shutil.copy(sticker_image_src_path, os.path.join(dest_sticker_image_path, sticker_filename))
         # generate Contents.json by Stickerpacks
         stickerpack_contents = dict(__SRC_STICKER_PACK_CONTENTS__)
         stickerpack_contents["properties"]["filename"] = sticker_filename
