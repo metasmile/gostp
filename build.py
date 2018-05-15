@@ -171,7 +171,6 @@ def main():
     if not os.path.exists(dest_stickerpack_path):
         print "[i] Destination sticker pack path does not exist. Creating ..."
         os.makedirs(dest_stickerpack_path)
-    else:
 
     # phase 5: copy iconset if it has existed
     src_stickericon_path = os.path.join(src_path, "@iconset")
