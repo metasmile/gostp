@@ -22,19 +22,16 @@ fi
 
 #git xcp beta
 if [ $skip_git_actions -eq 0 ]; then
+  cd $dest
+  git add . && git commit -m "[Updated - $name]"
+  cd -
   git xcp beta "$extension_name" && git xcp beta $name
 fi
 
 fastlane gym --scheme "$extension_name" && fastlane deliver --skip_metadata --skip_screenshots -f
 
 if [ $? -eq 0 ]; then
-
-  if [ $skip_git_actions -eq 0 ]; then
-    cd $dest
-    git add . && git commit -m "[Updated - $name]"
-    cd -
-  fi
-
+  
   echo "$dest"
 else
   echo "[!] Something wrong while build and upload binary!"
