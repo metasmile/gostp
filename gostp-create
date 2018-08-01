@@ -21,7 +21,9 @@ $fastfile_init_flag
 produce(username:"$user_id", app_name:"$itc_display_name", app_identifier:"$bundle_id", skip_itc:false)
 produce(username:"$user_id", app_name:"$extension_name", app_identifier:"$extension_bundle_id", skip_itc:true)
 sigh(app_identifier:"$bundle_id")
+sigh(app_identifier:"$bundle_id", development:true)
 sigh(app_identifier:"$extension_bundle_id")
+sigh(app_identifier:"$extension_bundle_id", development:true)
 update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$bundle_id.mobileprovision", target_filter:"$name")
 update_project_provisioning(xcodeproj:"$name.xcodeproj",profile: "./AppStore_$extension_bundle_id.mobileprovision", target_filter:"$extension_name")
 ${fastfile_content}
